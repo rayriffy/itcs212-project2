@@ -34,7 +34,7 @@ exports.crash = (res) => res.status(500).send({
 // HMAC hash function with secret bundled
 exports.hash = str => crypto.createHmac('sha256', HASH_SECRET).update(str).digest('hex')
 
-// Check token
+// Check token, if invalid then return null
 exports.checkToken = async token => {
   const [user, pass] = token.split(';')
   const conn = await pool

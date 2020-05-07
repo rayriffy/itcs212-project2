@@ -1,29 +1,59 @@
+// Responsible for initialize page and authentication
+
 $(document).ready(async () => {
-  $('#app').hide(0)
-  $('#auth').hide(0)
   // Check if user is authenticated
   const isAuthenticated = await checkAuth()
 
   if (isAuthenticated) {
     // If it is, then show application
-    $('#init').hide(0)
-    $('#app').show(0)
+    $('#init').toggleClass('d-none')
+    $('#app').toggleClass('d-none')
   } else {
     // Otherwise, show login screen
-    $('#init').hide(0)
-    $('#auth').show(0)
+    $('#init').toggleClass('d-none')
+    $('#auth').toggleClass('d-none')
   }
+
+  // If login button was clicked, then login
+  $('#auth-button').click(async () => {
+    $('#auth-button').text('Please wait...')
+    $('#auth-button').attr('disabled', true)
+    $('#auth-dialog').attr('class', 'd-none')
+
+    const user = $('#auth-user').val()
+    const pass = $('#auth-pass').val()
+
+    try {
+      // Get token
+      const token = await getAuthToken(user, pass)
+
+      // Store in LocalStorage
+      window.localStorage.setItem('token', token)
+
+      // Show dashboard
+      $('#auth').toggleClass('d-none')
+      $('#app').toggleClass('d-none')
+    } catch {
+      $('#auth-dialog').toggleClass('d-none')
+      $('#auth-button').text('Login')
+      $('#auth-button').attr('disabled', false)
+    }
+  })
 })
 
 // Check authentication status
 const checkAuth = async () => {
   try {
     // Get token from LocalStorage
-    const token = window.localStorage.getItem('auth')
+    const token = window.localStorage.getItem('token')
     
     // Ping to server
     const res = await fetch('/api/auth/ping', {
       method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         token,
       }),
@@ -41,6 +71,10 @@ const getAuthToken = async (user, pass) => {
   try {
     const res = await fetch('/api/auth/hello', {
       method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         user,
         pass,

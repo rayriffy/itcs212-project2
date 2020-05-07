@@ -1,3 +1,5 @@
+// Responsible for dashboard
+
 $(document).ready(async () => {
-  // Code
+  console.log('hit')
 })
