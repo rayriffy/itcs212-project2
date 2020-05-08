@@ -73,7 +73,7 @@ exports.getSpotifyToken = async () => {
 }
 
 // Get api endpoint for search youtube video
-exports.youtubeAPI = query => `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q="${query} movie trailer"&key=${GOOGLE_API_KEY}`
+exports.youtubeAPI = query => `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q="${query} movie trailer official"&regionCode=th&key=${GOOGLE_API_KEY}`
 
 exports.getTwitterToken = async () => {
   const client = Buffer.from(`${TWITTER_API_KEY}:${TWITTER_API_SECRET_KEY}`).toString('base64')

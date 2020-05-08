@@ -93,14 +93,24 @@ router.post('/youtube', async (req, res) => {
 // Get twitter token
 router.post('/twitter', async (req, res) => {
   try {
+    const { query } = req.body
     const token = await getTwitterToken()
+
+    const rawTweets = await fetch(`https://api.twitter.com/1.1/search/tweets.json?q="${query} movie"`, {
+      method: 'get',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    }).then(o => o.json())
 
     res.status(200).send({
       status: 'success',
       response: {
         message: 'obtained',
         data: {
-          token,
+          rawTweets,
         },
       },
     })
