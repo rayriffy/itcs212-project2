@@ -40,7 +40,103 @@
 
     <!-- Application section -->
     <div id="app" class="d-none">
-      App
+      <div class="pb-3">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-user-new">
+          New user
+        </button>
+      </div>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">User</th>
+            <th scope="col">Name</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal for create new user -->
+  <div class="modal fade" id="modal-user-new" tabindex="-1" role="dialog" aria-labelledby="modal-user-new-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-user-new-label">New user</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="d-none" id="modal-user-new-failed">
+            <div class="alert alert-danger" role="alert">
+              <b>Failed:</b> Unable to create user
+            </div>
+          </div>
+          <div class="d-none" id="modal-user-new-success">
+            <div class="alert alert-success" role="alert">
+              <b>Success:</b> User created
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="modal-user-new-name">Name</label>
+            <input type="text" class="form-control" id="modal-user-new-name">
+          </div>
+          <div class="form-group">
+            <label for="modal-user-new-user">Username</label>
+            <input type="text" class="form-control" id="modal-user-new-user">
+          </div>
+          <div class="form-group">
+            <label for="modal-user-new-pass">Password</label>
+            <input type="password" class="form-control" id="modal-user-new-pass">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="action-user-create">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for edit user -->
+  <div class="modal fade" id="modal-user-edit" tabindex="-1" role="dialog" aria-labelledby="modal-user-edit-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-user-edit-label">Editing user</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="d-none" id="modal-user-edit-failed">
+            <div class="alert alert-danger" role="alert">
+              <b>Failed:</b> Unable to edit user
+            </div>
+          </div>
+          <input type="hidden" id="modal-user-edit-user-id" />
+          <div class="form-group">
+            <label for="modal-user-edit-name">Name</label>
+            <input type="text" class="form-control" id="modal-user-edit-name">
+          </div>
+          <div class="form-group">
+            <label for="modal-user-edit-user">Username</label>
+            <input type="text" class="form-control" id="modal-user-edit-user" disabled>
+          </div>
+          <div class="form-group">
+            <label for="modal-user-edit-pass">Password</label>
+            <input type="password" class="form-control" id="modal-user-edit-pass" disabled>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="action-user-edit">Edit</button>
+        </div>
+      </div>
     </div>
   </div>
 

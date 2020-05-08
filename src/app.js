@@ -19,4 +19,4 @@ server.use(express.static(path.join(__dirname, 'public')))
 
 server.use('/api', apiRoute)
 
-server.listen(3000, () => console.log('yeet'))
+server.listen(3000, () => console.log('running at 3000'))

@@ -37,8 +37,6 @@ $(document).ready(async () => {
           }),
         }).then(o => o.json())
 
-        // const res = JSON.parse(`{"status":"success","response":{"message":"obtained","data":{"Title":"Hello World","Year":"2019","Rated":"N/A","Released":"20 Sep 2019","Runtime":"97 min","Genre":"Animation, Romance, Sci-Fi","Director":"Tomohiko Itô","Writer":"Mado Nozaki (screenplay)","Actors":"Haruka Fukuhara, Minami Hamabe, Takumi Kitamura, Minako Kotobuki","Plot":"A man travels in time from the year 2027 to relive his school years and to correct a bad decision.","Language":"Japanese","Country":"Japan","Awards":"2 nominations.","Poster":"https://m.media-amazon.com/images/M/MV5BOGIwYjZlOTctZTNhOC00OTdiLWI5ZWItOTdiMWRjMjUwMDlhXkEyXkFqcGdeQXVyNDQxNjcxNQ@@._V1_SX300.jpg","Ratings":[{"Source":"Internet Movie Database","Value":"7.0/10"}],"Metascore":"N/A","imdbRating":"7.0","imdbVotes":"188","imdbID":"tt9418812","Type":"movie","DVD":"N/A","BoxOffice":"N/A","Production":"N/A","Website":"N/A","Response":"True"}}}`)
-
         if (res.status === 'success' && res.response.data.Response === 'True') {
           const { Poster, Title, Year, Genre, Language, Director, Writer, Runtime, Actors, Plot } = res.response.data
 

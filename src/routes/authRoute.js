@@ -1,5 +1,7 @@
 const express = require('express')
 
+const authMiddleware = require('../middleware/auth')
+
 const { hash , pool, checkToken, crash } = require('../util')
 
 const router = express.Router()
@@ -11,34 +13,6 @@ router.get('/', async (req, res) => {
       message: 'hello',
     },
   })
-})
-
-// Test token
-router.get('/ping', async (req, res) => {
-  try {
-    const { authorization } = req.headers
-
-    // Request user data by token
-    const user = await checkToken(authorization)
-
-    if (user !== null) {
-      return res.status(200).send({
-        status: 'success',
-        response: {
-          message: 'pong',
-        },
-      })
-    } else {
-      return res.status(400).send({
-        status: 'failure',
-        response: {
-          message: 'foo',
-        },
-      })
-    }
-  } catch (e) {
-    crash(res)
-  }
 })
 
 // Get auth token
@@ -75,38 +49,16 @@ router.post('/hello', async (req, res) => {
   }
 })
 
-// Create user
-router.post('/newbie', async (req, res) => {
-  try {
-    const { user, pass, name } = req.body
+// Blow route will be check for auth
+router.use(authMiddleware)
 
-    const conn = await pool
-
-    // Check no account dup
-    const acc = await conn.query(`SELECT * FROM user WHERE user = "${user}"`)
-
-    if (acc.length === 0) {
-      // If not, create account
-      await conn.query(`INSERT INTO user (user, pass, name) VALUES ("${user}", "${hash(pass)}", "${name}")`)
-
-      return res.status(200).send({
-        status: 'success',
-        response: {
-          message: 'created',
-        },
-      })
-    } else {
-      // Otherwise, reject
-      return res.status(400).send({
-        status: 'failure',
-        response: {
-          message: 'account dupe',
-        },
-      })
-    }
-  } catch (e) {
-    crash(res)
-  }
+router.get('/ping', (req, res) => {
+  res.status(200).send({
+    status: 'success',
+    response: {
+      message: 'pong',
+    },
+  })
 })
 
 module.exports = router
