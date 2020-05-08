@@ -53,7 +53,7 @@ router.post('/movie', async (req, res) => {
 })
 
 // Request authorization header for Spotify API
-router.post('/spotify', async (req, res) => {
+router.get('/spotify', async (req, res) => {
   try {
     const token = await getSpotifyToken()
 

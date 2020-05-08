@@ -14,12 +14,12 @@ router.get('/', async (req, res) => {
 })
 
 // Test token
-router.post('/ping', async (req, res) => {
+router.get('/ping', async (req, res) => {
   try {
-    const { token } = req.body
+    const { authorization } = req.headers
 
     // Request user data by token
-    const user = await checkToken(token)
+    const user = await checkToken(authorization)
 
     if (user !== null) {
       return res.status(200).send({

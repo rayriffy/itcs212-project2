@@ -88,3 +88,14 @@ exports.getTwitterToken = async () => {
 
   return res.access_token
 }
+
+// Function to check user is admin or not
+exports.isAdmin = async user => {
+  try {
+    const conn = await pool
+    const query = await conn.query(`SELECT * FROM admin WHERE user = "${user}"`)
+    return query.length !== 0
+  } catch {
+    return false
+  }
+}

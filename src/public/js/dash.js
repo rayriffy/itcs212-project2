@@ -29,10 +29,10 @@ $(document).ready(async () => {
           method: 'post',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': token,
           },
           body: JSON.stringify({
-            token,
             query,
           }),
         }).then(o => o.json())
@@ -72,10 +72,10 @@ $(document).ready(async () => {
                 method: 'post',
                 headers: {
                   'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'Authorization': token,
                 },
                 body: JSON.stringify({
-                  token,
                   query,
                 }),
               }).then(o => o.json())
@@ -97,14 +97,12 @@ $(document).ready(async () => {
             try {
               // Get access token
               const spotifyToken = await fetch('/api/app/spotify', {
-                method: 'post',
+                method: 'get',
                 headers: {
                   'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'Authorization': token,
                 },
-                body: JSON.stringify({
-                  token,
-                }),
               }).then(o => o.json()).then(o => o.response.data.token)
 
               // Query playlist in spotify
@@ -138,10 +136,10 @@ $(document).ready(async () => {
                 method: 'post',
                 headers: {
                   'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'Authorization': token,
                 },
                 body: JSON.stringify({
-                  token,
                   query,
                 }),
               }).then(o => o.json())

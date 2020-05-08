@@ -1,20 +1,24 @@
-const { checkToken } = require('../util')
+const { checkToken, crash } = require('../util')
 
 const middleware = async (req, res, next) => {
-  const { token } = req.body
+  try {
+    const { authorization } = req.headers
 
-  const validity = await checkToken(token)
+    const validity = await checkToken(authorization)
 
-  if (validity !== null) {
-    req.user = validity
-    return next()
-  } else {
-    return res.status(401).send({
-      status: 'failure',
-      response: {
-        message: 'unauthorized',
-      },
-    })
+    if (validity !== null) {
+      req.user = validity
+      return next()
+    } else {
+      return res.status(401).send({
+        status: 'failure',
+        response: {
+          message: 'unauthorized',
+        },
+      })
+    }
+  } catch {
+    crash(res)
   }
 }
 

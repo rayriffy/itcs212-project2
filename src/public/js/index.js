@@ -35,6 +35,8 @@ $(document).ready(async () => {
       $('#auth').toggleClass('d-none')
       $('#auth-logout').toggleClass('d-none')
       $('#app').toggleClass('d-none')
+      $('#auth-button').text('Login')
+      $('#auth-button').attr('disabled', false)
     } catch {
       $('#auth-dialog').toggleClass('d-none')
       $('#auth-button').text('Login')
@@ -59,14 +61,12 @@ const checkAuth = async () => {
     
     // Ping to server
     const res = await fetch('/api/auth/ping', {
-      method: 'post',
+      method: 'get',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': token,
       },
-      body: JSON.stringify({
-        token,
-      }),
     }).then(o => o.json())
 
     // Return validity of token
