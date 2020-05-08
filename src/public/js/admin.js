@@ -6,7 +6,6 @@ $(document).ready(async () => {
     // If it is, then he is an admin
     $('#init').toggleClass('d-none')
     $('#app').toggleClass('d-none')
-    $('#auth-logout').toggleClass('d-none')
 
     // Fetch all user
     fetchUser()
