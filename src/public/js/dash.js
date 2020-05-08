@@ -9,6 +9,8 @@ $(document).ready(async () => {
       // Hide dialog
       $('#movie').attr('class', 'd-none')
       $('#movie-error').attr('class', 'd-none')
+      $('#movie-youtube').text('Loading YouTube trailer...')
+      $('#movie-spotify').text('Loading Spotify playlist...')
 
       // Get query
       const query = $('#app-search').val()
@@ -16,6 +18,10 @@ $(document).ready(async () => {
       try {
         // Get token from LocalStorage
         const token = window.localStorage.getItem('token')
+
+        /**
+         * 1. Get movie metadata
+         */
 
         // Get movie from query
         const res = await fetch('/api/app/movie', {
@@ -52,6 +58,72 @@ $(document).ready(async () => {
 
           // Release input in the end
           $('#app-search').attr('disabled', false)
+
+          /**
+           * 2. Get Youtube video
+           */
+          const getYouTubeVideo = async query => {
+            // Get video data
+            const youtube = await fetch('/api/app/youtube', {
+              method: 'post',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                token,
+                query,
+              }),
+            }).then(o => o.json())
+
+            console.log('youtube.response', youtube.response)
+
+            $('#movie-youtube').html(`
+              <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/${youtube.response.data.id.videoId}" allowfullscreen></iframe>
+              </div>
+            `)
+          }
+
+          /**
+           * 3. Get Spotify playlist
+           */
+          const getSpotifyPlaylist = async query => {
+            // Get access token
+            const spotifyToken = await fetch('/api/app/spotify', {
+              method: 'post',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                token,
+              }),
+            }).then(o => o.json()).then(o => o.response.data.token)
+
+            // Query playlist in spotify
+            const playlists = await fetch(`https://api.spotify.com/v1/search?q="${query}"&type=playlist&limit=1&market=TH`, {
+              method: 'get',
+              headers: {
+                'Authorization': `Bearer ${spotifyToken}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+            }).then(o => o.json())
+
+            const playlist = playlists.playlists.items[0]
+
+            // Inject HTML
+            $('#movie-spotify').html(`
+              <iframe src="https://open.spotify.com/embed/playlist/${playlist.id}" width="100%" height="480" frameborder="0" allow="encrypted-media"></iframe>
+            `)
+          }
+
+          /**
+           * 4. Execute 2 and 3 asynchronously
+           */
+          getYouTubeVideo(Title)
+          getSpotifyPlaylist(Title)
         } else {
           // Set detail
           $('#movie-error-title').text('Not Found')

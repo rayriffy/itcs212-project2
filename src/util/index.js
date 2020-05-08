@@ -1,6 +1,7 @@
 const mysql = require('promise-mysql')
 const dotenv = require('dotenv')
 const crypto = require('crypto')
+const fetch = require('node-fetch')
 
 dotenv.config()
 const {
@@ -8,12 +9,14 @@ const {
   MYSQL_PORT = 3306,
   MYSQL_USER = 'user',
   MYSQL_PASS = 'pass',
-  MYSQL_DATABASE = 'hw4',
+  MYSQL_DATABASE = 'db',
   HASH_SECRET = 'default',
   OMDB_API_KEY = 'default',
   SPOTIFY_CLIENT_ID = 'default',
   SPOTIFY_CLIENT_SECRET = 'default',
   GOOGLE_API_KEY = 'default',
+  TWITTER_API_KEY = 'default',
+  TWITTER_API_SECRET_KEY = 'default',
 } = process.env
 
 // Export ready pool connection
@@ -54,8 +57,36 @@ exports.checkToken = async token => {
 // Get api enpoint for OMDB API
 exports.omdbAPI = query => `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t="${query}"`
 
-// Get encoded spotify client auth
-exports.getSpotifyClient = () => Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64')
+// Get spotify token
+exports.getSpotifyToken = async () => {
+  const client = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64')
+
+  const res = await fetch('https://accounts.spotify.com/api/token?grant_type=client_credentials', {
+    method: 'post',
+    headers: {
+      'Authorization': `Basic ${client}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  }).then(o => o.json())
+
+  return res.access_token
+}
 
 // Get api endpoint for search youtube video
-exports.youtubeAPI = query => `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q="${query} movie trailer"&key="${GOOGLE_API_KEY}"`
+exports.youtubeAPI = query => `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q="${query} movie trailer"&key=${GOOGLE_API_KEY}`
+
+exports.getTwitterToken = async () => {
+  const client = Buffer.from(`${TWITTER_API_KEY}:${TWITTER_API_SECRET_KEY}`).toString('base64')
+
+  const res = await fetch('https://api.twitter.com/oauth2/token?grant_type=client_credentials', {
+    method: 'post',
+    headers: {
+      'Authorization': `Basic ${client}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  }).then(o => o.json())
+
+  console.log(res)
+
+  return res.access_token
+}

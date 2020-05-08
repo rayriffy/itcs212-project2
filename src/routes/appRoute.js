@@ -2,7 +2,13 @@ const express = require('express')
 
 const fetch = require('node-fetch')
 
-const { hash, checkToken, crash, omdbAPI, getSpotifyClient, youtubeAPI } = require('../util')
+const {
+  crash,
+  getSpotifyToken,
+  getTwitterToken,
+  omdbAPI,
+  youtubeAPI
+} = require('../util')
 const middleware = require('../middleware/auth')
 
 const router = express.Router()
@@ -16,33 +22,9 @@ router.get('/', async (req, res) => {
   })
 })
 
-
-router.post('/spotify', async (req, res) => {
-  console.log(getSpotifyClient())
-  const response = await fetch('https://accounts.spotify.com/api/token', {
-    method: 'post',
-    headers: {
-      'Authorization': `Basic ${getSpotifyClient()}`
-    },
-    form: {
-      grant_type: 'client_credentials'
-    },
-  })
-
-  console.log(response)
-  // res.status(200).send({
-  //   status: 'success',
-  //   response: {
-  //     message: 'obtained',
-  //     data: {
-  //       token: getSpotifyClient(),
-  //     },
-  //   },
-  // })
-})
-
 router.use(middleware)
 
+// Get movie metadata
 router.post('/movie', async (req, res) => {
   const { query = '' } = req.body
 
@@ -66,11 +48,67 @@ router.post('/movie', async (req, res) => {
       })
     }
   } catch (e) {
-    console.log(e)
     crash(res)
   }
 })
 
 // Request authorization header for Spotify API
+router.post('/spotify', async (req, res) => {
+  try {
+    const token = await getSpotifyToken()
+
+    res.status(200).send({
+      status: 'success',
+      response: {
+        message: 'obtained',
+        data: {
+          token,
+        },
+      },
+    })
+  } catch (e) {
+    crash(res)
+  }
+})
+
+// Get YouTube trailer based on query
+router.post('/youtube', async (req, res) => {
+  try {
+    const { query } = req.body
+
+    const youtube = await fetch(youtubeAPI(query)).then(o => o.json())
+
+    res.status(200).send({
+      status: 'success',
+      response: {
+        message: 'obtained',
+        data: youtube.items[0],
+      },
+    })
+  } catch (e) {
+    crash(res)
+  }
+})
+
+// Get twitter token
+router.post('/twitter', async (req, res) => {
+  try {
+    const token = await getTwitterToken()
+
+    console.log(token)
+
+    res.status(200).send({
+      status: 'success',
+      response: {
+        message: 'obtained',
+        data: {
+          token,
+        },
+      },
+    })
+  } catch (e) {
+    crash(res)
+  }
+})
 
 module.exports = router
