@@ -95,8 +95,6 @@ router.post('/twitter', async (req, res) => {
   try {
     const token = await getTwitterToken()
 
-    console.log(token)
-
     res.status(200).send({
       status: 'success',
       response: {

@@ -76,8 +76,6 @@ $(document).ready(async () => {
               }),
             }).then(o => o.json())
 
-            console.log('youtube.response', youtube.response)
-
             $('#movie-youtube').html(`
               <div class="embed-responsive embed-responsive-16by9">
                 <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/${youtube.response.data.id.videoId}" allowfullscreen></iframe>

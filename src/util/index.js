@@ -86,7 +86,5 @@ exports.getTwitterToken = async () => {
     },
   }).then(o => o.json())
 
-  console.log(res)
-
   return res.access_token
 }
