@@ -52,7 +52,64 @@
 
     <!-- Application section -->
     <div id="app" class="d-none">
-      App
+      <!-- Search box -->
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+          <input type="email" class="form-control form-control-lg" id="app-search" placeholder="Search and press Enter">
+        </div>
+      </div>
+      <!-- Movie result section -->
+      <div class="d-none" id="movie">
+        <div class="row justify-content-center py-5" id="movie">
+          <div class="col-12 col-md-5 d-flex justify-content-center">
+            <img id="movie-poster" src="https://storage.rayriffy.com/files/image/kaguya.jpg" class="img-fluid rounded mx-auto" alt="Responsive image">
+          </div>
+          <div class="col-12 col-md-7">
+            <h3 id="movie-title-year">## (##)</h3>
+            <div class="row">
+              <div class="col-6 py-1" id="movie-genre">
+                <b>Genre:</b> <span>##</span>
+              </div>
+              <div class="col-6 py-1" id="movie-language">
+                <b>Language:</b> <span>##</span>
+              </div>
+              <div class="col-3 py-1" id="movie-director">
+                <b>Director:</b> <span>##</span>
+              </div>
+              <div class="col-9 py-1" id="movie-writer">
+                <b>Writer:</b> <span>##</span>
+              </div>
+              <div class="col-3 py-1" id="movie-runtime">
+                <b>Runtime:</b> <span>##</span>
+              </div>
+              <div class="col-9 py-1" id="movie-actors">
+                <b>Actors:</b> <span>##</span>
+              </div>
+              <div class="col-12 py-1" id="movie-plot">
+                <b>Plot:</b> <span>##</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6"></div>
+          <div class="col-6"></div>
+        </div>
+      </div>
+      <!-- Error dialog -->
+      <div class="d-none" id="movie-error">
+        <div class="row justify-content-center py-5" id="movie">
+          <div class="col-12 col-md-5 d-flex justify-content-center">
+            <div class="card">
+              <img src="https://media.giphy.com/media/14rivMbeyNnqXS/giphy.gif" class="card-img-top">
+              <div class="card-body">
+                <h5 class="card-title" id="movie-error-title">##</h5>
+                <p class="card-text" id="movie-error-description">##</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

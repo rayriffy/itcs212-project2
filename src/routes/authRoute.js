@@ -18,8 +18,6 @@ router.post('/ping', async (req, res) => {
   try {
     const { token } = req.body
 
-    console.log(token)
-
     // Request user data by token
     const user = await checkToken(token)
 
