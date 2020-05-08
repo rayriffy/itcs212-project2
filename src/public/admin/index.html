@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous" />
+</head>
+<body>
+  <!-- App -->
+  <div class="container">
+    <div class="d-flex align-items-center py-5">
+      <h1>Movie Search</h1>
+      <div class="mx-auto"></div>
+      <div id="auth-logout" class="d-none">
+        <button type="button" class="btn btn-warning">Logout</button>
+      </div>
+    </div>
+
+    <!-- Show loading when app first load -->
+    <div id="init">
+      Loading...
+    </div>
+
+    <!-- Application section -->
+    <div id="app" class="d-none">
+      App
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="/js/admin.js" async></script>
+</body>
+</html>

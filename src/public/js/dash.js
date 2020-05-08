@@ -11,6 +11,7 @@ $(document).ready(async () => {
       $('#movie-error').attr('class', 'd-none')
       $('#movie-youtube').text('Loading YouTube trailer...')
       $('#movie-spotify').text('Loading Spotify playlist...')
+      $('#movie-twitter').text('Loading tweets...')
 
       // Get query
       const query = $('#app-search').val()
@@ -35,6 +36,8 @@ $(document).ready(async () => {
             query,
           }),
         }).then(o => o.json())
+
+        // const res = JSON.parse(`{"status":"success","response":{"message":"obtained","data":{"Title":"Hello World","Year":"2019","Rated":"N/A","Released":"20 Sep 2019","Runtime":"97 min","Genre":"Animation, Romance, Sci-Fi","Director":"Tomohiko Itô","Writer":"Mado Nozaki (screenplay)","Actors":"Haruka Fukuhara, Minami Hamabe, Takumi Kitamura, Minako Kotobuki","Plot":"A man travels in time from the year 2027 to relive his school years and to correct a bad decision.","Language":"Japanese","Country":"Japan","Awards":"2 nominations.","Poster":"https://m.media-amazon.com/images/M/MV5BOGIwYjZlOTctZTNhOC00OTdiLWI5ZWItOTdiMWRjMjUwMDlhXkEyXkFqcGdeQXVyNDQxNjcxNQ@@._V1_SX300.jpg","Ratings":[{"Source":"Internet Movie Database","Value":"7.0/10"}],"Metascore":"N/A","imdbRating":"7.0","imdbVotes":"188","imdbID":"tt9418812","Type":"movie","DVD":"N/A","BoxOffice":"N/A","Production":"N/A","Website":"N/A","Response":"True"}}}`)
 
         if (res.status === 'success' && res.response.data.Response === 'True') {
           const { Poster, Title, Year, Genre, Language, Director, Writer, Runtime, Actors, Plot } = res.response.data
@@ -63,65 +66,110 @@ $(document).ready(async () => {
            * 2. Get Youtube video
            */
           const getYouTubeVideo = async query => {
-            // Get video data
-            const youtube = await fetch('/api/app/youtube', {
-              method: 'post',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                token,
-                query,
-              }),
-            }).then(o => o.json())
+            try {
+              // Get video data
+              const youtube = await fetch('/api/app/youtube', {
+                method: 'post',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  token,
+                  query,
+                }),
+              }).then(o => o.json())
 
-            $('#movie-youtube').html(`
-              <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/${youtube.response.data.id.videoId}" allowfullscreen></iframe>
-              </div>
-            `)
+              $('#movie-youtube').html(`
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/${youtube.response.data.id.videoId}" allowfullscreen></iframe>
+                </div>
+              `)
+            } catch {
+              $('#movie-youtube').text('Failed to load YouTube video')
+            }
           }
 
           /**
            * 3. Get Spotify playlist
            */
           const getSpotifyPlaylist = async query => {
-            // Get access token
-            const spotifyToken = await fetch('/api/app/spotify', {
-              method: 'post',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                token,
-              }),
-            }).then(o => o.json()).then(o => o.response.data.token)
+            try {
+              // Get access token
+              const spotifyToken = await fetch('/api/app/spotify', {
+                method: 'post',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  token,
+                }),
+              }).then(o => o.json()).then(o => o.response.data.token)
 
-            // Query playlist in spotify
-            const playlists = await fetch(`https://api.spotify.com/v1/search?q="${query}"&type=playlist&limit=1&market=TH`, {
-              method: 'get',
-              headers: {
-                'Authorization': `Bearer ${spotifyToken}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-            }).then(o => o.json())
+              // Query playlist in spotify
+              const playlists = await fetch(`https://api.spotify.com/v1/search?q="${query}"&type=playlist&limit=1&market=TH`, {
+                method: 'get',
+                headers: {
+                  'Authorization': `Bearer ${spotifyToken}`,
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+              }).then(o => o.json())
 
-            const playlist = playlists.playlists.items[0]
+              const playlist = playlists.playlists.items[0]
 
-            // Inject HTML
-            $('#movie-spotify').html(`
-              <iframe src="https://open.spotify.com/embed/playlist/${playlist.id}" width="100%" height="480" frameborder="0" allow="encrypted-media"></iframe>
-            `)
+              // Inject HTML
+              $('#movie-spotify').html(`
+                <iframe src="https://open.spotify.com/embed/playlist/${playlist.id}" width="100%" height="480" frameborder="0" allow="encrypted-media"></iframe>
+              `)
+            } catch {
+              $('#movie-spotify').text('Failed to load Spotify playlist')
+            }
           }
 
           /**
-           * 4. Execute 2 and 3 asynchronously
+           * 4. Get Twitter tweet - Need to query from server to avoid CORS
+           */
+          const getTwitterTweet = async query => {
+            try {
+              // Get tweets
+              const twiiterRes = await fetch('/api/app/twitter', {
+                method: 'post',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  token,
+                  query,
+                }),
+              }).then(o => o.json())
+
+              // Render
+              $('#movie-twitter').html(`
+                ${twiiterRes.response.data.rawTweets.statuses.map(status => `
+                  <div class="media py-3">
+                    <img src="${status.user.profile_image_url_https}" class="mr-3 rounded-circle" alt="${status.user.name}">
+                    <div class="media-body">
+                      <h5 class="mt-0">${status.user.name}</h5>
+                      ${status.text}
+                    </div>
+                  </div>
+                `).join('')}
+                ${twiiterRes.response.data.rawTweets.statuses.length === 0 ? 'No tweets about this in last 7 days' : ''}
+              `)
+            } catch {
+              $('#movie-twitter').text('Failed to load tweets')
+            }
+          }
+
+          /**
+           * 5. Execute 2, 3 and 4 asynchronously
            */
           getYouTubeVideo(Title)
           getSpotifyPlaylist(Title)
+          getTwitterTweet(Title)
         } else {
           // Set detail
           $('#movie-error-title').text('Not Found')

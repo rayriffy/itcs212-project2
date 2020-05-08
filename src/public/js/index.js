@@ -1,4 +1,4 @@
-// Responsible for initialize page and authentication
+// Responsible for initialize page and authentication in user side
 
 $(document).ready(async () => {
   // Check if user is authenticated
@@ -8,6 +8,7 @@ $(document).ready(async () => {
     // If it is, then show application
     $('#init').toggleClass('d-none')
     $('#app').toggleClass('d-none')
+    $('#auth-logout').toggleClass('d-none')
   } else {
     // Otherwise, show login screen
     $('#init').toggleClass('d-none')
@@ -32,12 +33,21 @@ $(document).ready(async () => {
 
       // Show dashboard
       $('#auth').toggleClass('d-none')
+      $('#auth-logout').toggleClass('d-none')
       $('#app').toggleClass('d-none')
     } catch {
       $('#auth-dialog').toggleClass('d-none')
       $('#auth-button').text('Login')
       $('#auth-button').attr('disabled', false)
     }
+  })
+
+  // If logout, remove token from storage and show auth screen
+  $('#auth-logout > button').click(() => {
+    window.localStorage.removeItem('token')
+    $('#app').toggleClass('d-none')
+    $('#auth-logout').toggleClass('d-none')
+    $('#auth').toggleClass('d-none')
   })
 })
 

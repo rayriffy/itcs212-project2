@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Movie Search</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous" />
-  <style>
-    body > .container {
-      padding-top: 64px;
-    }
-    body > .container > h1 {
-      padding-bottom: 32px;
-    }
-  </style>
 </head>
 <body>
   <!-- App -->
   <div class="container">
-    <h1>Movie Search</h1>
+    <div class="d-flex align-items-center py-5">
+      <h1>Movie Search</h1>
+      <div class="mx-auto"></div>
+      <div id="auth-logout" class="d-none">
+        <button type="button" class="btn btn-warning">Logout</button>
+      </div>
+    </div>
 
     <!-- Show loading when app first load -->
     <div id="init">
@@ -97,6 +95,12 @@
           </div>
           <div class="col-12 col-md-6 p-4" id="movie-spotify">
             Loading Spotify playlist...
+          </div>
+        </div>
+        <div class="py-5">
+          <h2>Tweets</h2>
+          <div id="movie-twitter">
+            Loading tweets...
           </div>
         </div>
       </div>
