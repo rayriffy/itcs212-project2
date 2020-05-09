@@ -117,7 +117,7 @@ $(document).ready(async () => {
 
               // Inject HTML
               $('#movie-spotify').html(`
-                <iframe src="https://open.spotify.com/embed/playlist/${playlist.id}" width="100%" height="480" frameborder="0" allow="encrypted-media"></iframe>
+                <iframe title="Movie Trailer" src="https://open.spotify.com/embed/playlist/${playlist.id}" width="100%" height="480" frameborder="0" allow="encrypted-media"></iframe>
               `)
             } catch {
               $('#movie-spotify').text('Failed to load Spotify playlist')

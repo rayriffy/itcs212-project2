@@ -9,7 +9,7 @@ const {
   omdbAPI,
   youtubeAPI
 } = require('../util')
-const middleware = require('../middleware/auth')
+const authMiddleware = require('../middleware/auth')
 
 const router = express.Router()
 
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
   })
 })
 
-router.use(middleware)
+router.use(authMiddleware)
 
 // Get movie metadata
 router.post('/movie', async (req, res) => {
@@ -40,7 +40,7 @@ router.post('/movie', async (req, res) => {
         },
       })
     } else {
-      return res.status(400).send({
+      return res.status(404).send({
         status: 'failed',
         response: {
           message: 'not found',
@@ -90,7 +90,7 @@ router.post('/youtube', async (req, res) => {
   }
 })
 
-// Get twitter token
+// Get twitter tweet results
 router.post('/twitter', async (req, res) => {
   try {
     const { query } = req.body

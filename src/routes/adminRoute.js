@@ -45,7 +45,9 @@ router.get('/users', async (req, res) => {
         data: query,
       },
     })
-  } catch {}
+  } catch {
+    crash(res)
+  }
 })
 
 // Create user
