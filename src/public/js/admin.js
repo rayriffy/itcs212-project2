@@ -161,7 +161,7 @@ const fetchUser = async () => {
             </div>
           </td>
         </tr>
-      `)}
+      `).join('')}
     `)
   } catch (e) {
     console.log(e)
