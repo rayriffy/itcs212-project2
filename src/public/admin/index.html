@@ -9,9 +9,9 @@
 <body>
   <!-- App -->
   <div class="container">
-    <div class="d-flex align-items-center py-5">
+    <nav class="d-flex align-items-center py-5">
       <h1>Movie Search</h1>
-    </div>
+    </nav>
 
     <!-- Show loading when app first load -->
     <div id="init">
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Application section -->
-    <div id="app" class="d-none">
+    <main id="app" class="d-none">
       <div class="pb-3">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-user-new">
           New user
@@ -54,7 +54,7 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </main>
 
   <!-- Modal for create new user -->
   <div class="modal fade" id="modal-user-new" tabindex="-1" role="dialog" aria-labelledby="modal-user-new-label" aria-hidden="true">
